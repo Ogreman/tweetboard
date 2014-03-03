@@ -96,7 +96,7 @@ def notes_list():
             text=bleach.clean(text)
         )
         tweet = api.update_status(
-            '"{status}" -anon.'.format(
+            '"{status}" - anon.'.format(
                 status=note.text
             )
         )
