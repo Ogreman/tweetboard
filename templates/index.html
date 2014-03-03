@@ -70,7 +70,7 @@ function handleForm(){
             $("#status")[0].innerHTML="posting..."
             $.post('/api/', {
                 text: $("#text").val()
-            });
+            })
             .done(function(data) {
                 $("#text").val("");
                 if (data.message) {
@@ -83,10 +83,10 @@ function handleForm(){
                         $("#status")[0].innerHTML="FAILED!"
                     }
                 }
-            });
+            })
             .error(function(xhr, textStatus, errorThrown) {
                 $("#status")[0].innerHTML="FAILED!"
-            });
+            })
         });
         return false;
     } else {}
