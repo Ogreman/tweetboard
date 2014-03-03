@@ -87,7 +87,11 @@ def notes_list():
         )
         db.session.add(note)
         db.session.commit()
-        api.update_status(note.text)
+        api.update_status(
+            '"{status}" -anon.'.format(
+                status=note.text
+            )
+        )
         return note.to_json(), status.HTTP_201_CREATED
 
     # request.method == 'GET'
