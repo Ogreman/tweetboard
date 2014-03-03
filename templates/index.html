@@ -85,13 +85,9 @@ function handleForm(){
                 }
             })
             .fail(function(xhr, textStatus, errorThrown) {
-                if (xhr.message) {
-                    $("#status")[0].innerHTML=data.message;
+                if (xhr.responseText.message) {
+                    $("#status")[0].innerHTML=xhr.responseText.message;
                 }
-
-                console.log(xhr);
-                console.log(textStatus);
-                console.log(errorThrown);
             })
         });
         return false;
