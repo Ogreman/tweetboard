@@ -70,18 +70,25 @@ function handleForm(){
             $("#status")[0].innerHTML="posting..."
             $.post('/api/', {
                 text: $("#text").val()
-            }, function(data) {
-                $("#text").val("");
-                if (data.message) {
-                    $("#status")[0].innerHTML=data.message;
-                } else {
-                    if (data.created) {
-                        $('<p id="note-' + data.id + '"><a href="' + data.twitter_url + '">' + data.text + "</a></p>").insertAfter("#new");
-                        $("#status")[0].innerHTML="POSTED!"
+            })
+                .done(function(data) {
+                    $("#text").val("");
+                    if (data.message) {
+                        $("#status")[0].innerHTML=data.message;
                     } else {
-                        $("#status")[0].innerHTML="FAILED!"
+                        if (data.created) {
+                            $('<p id="note-' + data.id + '"><a href="' + data.twitter_url + '">' + data.text + "</a></p>").insertAfter("#new");
+                            $("#status")[0].innerHTML="POSTED!"
+                        } else {
+                            $("#status")[0].innerHTML="FAILED!"
+                        }
                     }
-                }
+                })
+                .fail(function(xhr, textStatus, errorThrown) {
+                    if (xhr.message) {
+                        $("#status")[0].innerHTML=data.message;
+                    }
+                })
             });
             return false;
         });
