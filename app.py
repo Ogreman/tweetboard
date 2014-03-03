@@ -91,15 +91,22 @@ def notes_list():
     if request.method == 'POST':
         text = request.data.get('text', '')
         if not text:
-            return { "message": "Please enter text" }, status.HTTP_204_NO_CONTENT
+            return {
+                "message": "Please enter text"
+            }, status.HTTP_204_NO_CONTENT
         note = Note(
             text=bleach.clean(text)
         )
-        tweet = api.update_status(
-            '"{status}" - anon.'.format(
-                status=note.text
+        try:
+            tweet = api.update_status(
+                '"{status}" - anon.'.format(
+                    status=note.text
+                )
             )
-        )
+        except tweepy.TweepError:
+            return {
+                "message": "Failed to post to twitter"
+            }, status.HTTP_403_FORBIDDEN
         note.status_id = str(tweet.id)
         db.session.add(note)
         db.session.commit()
