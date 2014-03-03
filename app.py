@@ -95,13 +95,13 @@ def notes_list():
         note = Note(
             text=bleach.clean(text)
         )
-        db.session.add(note)
         status = api.update_status(
             '"{status}" -anon.'.format(
                 status=note.text
             )
         )
         note.status_id = str(status.id)
+        db.session.add(note)
         db.session.commit()
         return note.to_json(), status.HTTP_201_CREATED
 
