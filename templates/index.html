@@ -88,11 +88,14 @@ function handleForm(){
                 if (xhr.message) {
                     $("#status")[0].innerHTML=data.message;
                 }
+
+                console.log(xhr);
+                console.log(textStatus);
+                console.log(errorThrown);
             })
         });
         return false;
-    } else {
-    }
+    } else {}
 }
 
 window.setInterval(getLatest, 5000);
