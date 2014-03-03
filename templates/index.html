@@ -21,7 +21,7 @@
 <div id="notes">
     <div id="new"></div>
     {% for note in notes %}
-        <p id="note-{{ note.id }}"><a href="{{ note.url }}">{{ note.text }}</a></p>
+        <p id="note-{{ note.id }}"><a href="{{ note.twitter_url }}">{{ note.text }}</a></p>
     {% endfor %}
 </div>
 </h1>
@@ -36,7 +36,7 @@ function getPosts(){
                     console.log(data.message);
                 } else {
                     $.each(data, function(k, v) {
-                        $('#notes')[0].innerHTML += '<p id="note-' + v.id + '"><a href="' + v.url + '">' + v.text + "</a></p>";
+                        $('#notes')[0].innerHTML += '<p id="note-' + v.id + '"><a href="' + v.twitter_url + '">' + v.text + "</a></p>";
                     });
                 }
             });
@@ -54,7 +54,7 @@ function getLatest(){
                     console.log(data.message);
                 } else {
                     if ($('#note-' + data.id).length === 0) {
-                        $('<p id="note-' + data.id + '"><a href="' + data.url + '">' + data.text + "</a></p>").insertAfter("#new");
+                        $('<p id="note-' + data.id + '"><a href="' + data.twitter_url + '">' + data.text + "</a></p>").insertAfter("#new");
                     }
                 }
             });
@@ -76,7 +76,7 @@ function handleForm(){
                     $("#status")[0].innerHTML=data.message;
                 } else {
                     if (data.created) {
-                        $('<p id="note-' + data.id + '"><a href="' + data.url + '">' + data.text + "</a></p>").insertAfter("#new");
+                        $('<p id="note-' + data.id + '"><a href="' + data.twitter_url + '">' + data.text + "</a></p>").insertAfter("#new");
                         $("#status")[0].innerHTML="POSTED!"
                     } else {
                         $("#status")[0].innerHTML="FAILED!"

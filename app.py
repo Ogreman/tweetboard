@@ -25,6 +25,7 @@ CONSUMER_KEY = os.environ['CONSUMER_KEY']
 CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
 ACCESS_KEY  = os.environ['ACCESS_KEY']
 ACCESS_SECRET = os.environ['ACCESS_SECRET']
+TWITTER_USER = os.environ['TWITTER_USER']
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
@@ -38,6 +39,7 @@ class Note(db.Model):
     text = Column(String)
     created = Column(DateTime, default=datetime.datetime.now())
     deleted = Column(Boolean, default=False)
+    status_id = Column(String)
 
     def __repr__(self):
         return self.text
@@ -54,7 +56,15 @@ class Note(db.Model):
             'parent_url': request.host_url.rstrip('/') + url_for(
                 'notes_list'
             ),
+            'twitter_url': self.twitter_url,
         }
+
+    @property
+    def twitter_url(self):
+        return "https://twitter.com/{user}/status/{status}".format(
+            user=TWITTER_USER,
+            status=self.status_id,
+        )
 
     @classmethod
     def get_notes(self):
@@ -86,12 +96,13 @@ def notes_list():
             text=bleach.clean(text)
         )
         db.session.add(note)
-        db.session.commit()
-        api.update_status(
+        status = api.update_status(
             '"{status}" -anon.'.format(
                 status=note.text
             )
         )
+        note.status_id = str(status.id)
+        db.session.commit()
         return note.to_json(), status.HTTP_201_CREATED
 
     # request.method == 'GET'
