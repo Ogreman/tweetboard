@@ -71,27 +71,26 @@ function handleForm(){
             $.post('/api/', {
                 text: $("#text").val()
             })
-                .done(function(data) {
-                    $("#text").val("");
-                    if (data.message) {
-                        $("#status")[0].innerHTML=data.message;
+            .done(function(data) {
+                $("#text").val("");
+                if (data.message) {
+                    $("#status")[0].innerHTML=data.message;
+                } else {
+                    if (data.created) {
+                        $('<p id="note-' + data.id + '"><a href="' + data.twitter_url + '">' + data.text + "</a></p>").insertAfter("#new");
+                        $("#status")[0].innerHTML="POSTED!"
                     } else {
-                        if (data.created) {
-                            $('<p id="note-' + data.id + '"><a href="' + data.twitter_url + '">' + data.text + "</a></p>").insertAfter("#new");
-                            $("#status")[0].innerHTML="POSTED!"
-                        } else {
-                            $("#status")[0].innerHTML="FAILED!"
-                        }
+                        $("#status")[0].innerHTML="FAILED!"
                     }
-                })
-                .fail(function(xhr, textStatus, errorThrown) {
-                    if (xhr.message) {
-                        $("#status")[0].innerHTML=data.message;
-                    }
-                })
-            });
-            return false;
+                }
+            })
+            .fail(function(xhr, textStatus, errorThrown) {
+                if (xhr.message) {
+                    $("#status")[0].innerHTML=data.message;
+                }
+            })
         });
+        return false;
     } else {
     }
 }
