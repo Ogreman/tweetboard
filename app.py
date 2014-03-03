@@ -95,12 +95,12 @@ def notes_list():
         note = Note(
             text=bleach.clean(text)
         )
-        status = api.update_status(
+        tweet = api.update_status(
             '"{status}" -anon.'.format(
                 status=note.text
             )
         )
-        note.status_id = str(status.id)
+        note.status_id = str(tweet.id)
         db.session.add(note)
         db.session.commit()
         return note.to_json(), status.HTTP_201_CREATED
