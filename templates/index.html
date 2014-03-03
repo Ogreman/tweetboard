@@ -12,6 +12,8 @@
 <input type="text" id="text" name="text" onkeydown="if (event.keyCode == 13) document.getElementById('btnPost').click()" />
 <button id="btnPost" onclick="handleForm()" type="button">post</button>
 <button id="btnRefr" onclick="getPosts()" type="button">refresh</button>
+<a href="https://twitter.com/tweetboardbot"><img src="{{ url_for('static', filename='Twitter_logo_blue.png') }}" style="position:fixed; top:5; right:5;" alt="Check Tweets" /></a>
+
 <div id="status" style="font-size: 30px;"></div>
 </h1>
 
