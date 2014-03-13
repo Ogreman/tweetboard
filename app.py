@@ -76,6 +76,22 @@ class Note(db.Model):
             )
         ]
 
+    @classmethod
+    def get_notes_from_today(self):
+        now = datetime.datetime.now()
+        then = now.replace(day=now.day - 1)
+        return [
+            note.to_json() for note in Note.query.filter(
+                Note.deleted == False
+            ).filter(
+                Note.created <= now
+            ).filter(
+                Note.created >= then
+            ).order_by(
+                desc(Note.id),
+            )
+        ]
+
 
 @app.route("/", methods=['GET'])
 @set_renderers([HTMLRenderer])
@@ -120,6 +136,14 @@ def notes_list():
 def latest():
     try:
         return Note.get_notes()[0]
+    except IndexError:
+        return { "message": "No posts" }, status.HTTP_204_NO_CONTENT
+
+
+@app.route("/api/recent/", methods=['GET'])
+def recent():
+    try:
+        return Note.get_notes_from_today()
     except IndexError:
         return { "message": "No posts" }, status.HTTP_204_NO_CONTENT
 
